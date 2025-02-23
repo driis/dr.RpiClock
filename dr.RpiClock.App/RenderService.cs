@@ -9,12 +9,11 @@ using System.IO;
 public class RenderService(IOptions<RpiClockOptions> _options, ILogger<RenderService> _logger)
 {
     private readonly int _bufferSize = _options.Value.Height * _options.Value.Width * 2;
-    private Stream _outStream;
     public async Task Run(CancellationToken ct)
     {
         var options = _options.Value;
         var (width,height) = (options.Width, options.Height);
-        await using var outFile = _outStream = File.Open(options.OutputFileName, FileMode.OpenOrCreate);
+        await using var outFile = File.Open(options.OutputFileName, FileMode.OpenOrCreate);
         using var image = new Image<Bgr565>(width, height);
         var pos = new PointF(width/2, height/2);
         var vec = new PointF(1, -1);
@@ -30,7 +29,7 @@ public class RenderService(IOptions<RpiClockOptions> _options, ILogger<RenderSer
                 var circle = new EllipsePolygon(pos, r);
                 ctx.Fill(Color.Red, circle);
             });
-            Draw(image, buffer);
+            Draw(outFile, image, buffer);
             await Task.Delay(5);
             pos += vec;
             if (pos.X <= 0 || pos.X >= width)
@@ -45,11 +44,10 @@ public class RenderService(IOptions<RpiClockOptions> _options, ILogger<RenderSer
         } while (options.Continuous && !ct.IsCancellationRequested);
     }
     
-    void Draw(Image<Bgr565> img, Span<byte> buffer)
+    void Draw(Stream outStream, Image<Bgr565> img, Span<byte> buffer)
     {
-        _outStream.Seek(0, SeekOrigin.Begin);
+        outStream.Seek(0, SeekOrigin.Begin);
         img.CopyPixelDataTo(buffer);
-        _outStream.Write(buffer);    
-        _outStream.Flush();
+        outStream.Write(buffer);    
     }
 }
