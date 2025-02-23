@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace dr.RpiClock.App;
 
@@ -9,16 +10,21 @@ public static class Configuration
         var serviceProvider = new ServiceCollection()
             .AddLogging(configure => configure.AddConsole().SetMinimumLevel(LogLevel.Information))
             .AddSingleton<IOptions<RpiClockOptions>, RpiClockOptionParser>(sc => new RpiClockOptionParser(args))
-            .AddTransient<RenderService>()
-            .BuildServiceProvider();
-        return serviceProvider;
+            .AddTransient<RenderService>();
+
+        if (args.Contains("-c"))
+            serviceProvider.AddTransient<IPixelRenderer, FrameBufferRenderer>();
+        else
+            serviceProvider.AddTransient<IPixelRenderer, BmpPixelRenderer>();
+            
+        return serviceProvider.BuildServiceProvider();
     }
 
     public class RpiClockOptionParser : IOptions<RpiClockOptions>
     {
         private readonly string[] _options;
         private readonly string[] _arguments;
-        public RpiClockOptions Value { get; private set; }
+        public RpiClockOptions Value { get; }
         public RpiClockOptionParser(string[] args)
         {
             _options = args.Where(a => a.StartsWith('-')).Select(a => a.Trim('-')).ToArray();
@@ -36,6 +42,4 @@ public static class Configuration
     }
 }
 
-public record RpiClockOptions(int Width, int Height, string OutputFileName, bool Continuous) 
-{
-}
+public record RpiClockOptions(int Width, int Height, string OutputFileName, bool Continuous);
