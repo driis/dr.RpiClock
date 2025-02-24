@@ -6,15 +6,13 @@ namespace dr.RpiClock.App;
 public class FrameBufferRenderer : IPixelRenderer, IAsyncDisposable
 {
     private readonly IOptions<RpiClockOptions> _options;
-    private readonly ILogger<RenderService> _logger;
     private readonly byte[] _buffer;
-    public const int BytesPerPixel = 2;     // 16 bpp
+    public const int BytesPerPixel = 4;     // 32 bpp
     private readonly Stream _outputStream;
-    public FrameBufferRenderer(IOptions<RpiClockOptions> options, ILogger<RenderService> logger)
+    public FrameBufferRenderer(IOptions<RpiClockOptions> options)
     {
         _options = options;
-        _logger = logger;
-        _buffer = new byte[_options.Value.Width * _options.Value.Height * 2];
+        _buffer = new byte[_options.Value.Width * _options.Value.Height * BytesPerPixel];
         _outputStream = File.Open(_options.Value.OutputFileName, FileMode.OpenOrCreate);
     }
     public Task RenderToOutput<TPixel>(Image<TPixel> image, CancellationToken ct) where TPixel : unmanaged, IPixel<TPixel>

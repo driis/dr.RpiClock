@@ -8,12 +8,11 @@ using System.IO;
 
 public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer renderer, ILogger<RenderService> logger)
 {
-    private readonly int _bufferSize = options.Value.Height * options.Value.Width * 2;
     public async Task Run(CancellationToken ct)
     {
         var opt = options.Value;
         var (width,height) = (opt.Width, opt.Height);
-        using var image = new Image<Bgr565>(width, height);
+        using var image = new Image<Rgba32>(width, height);
 
         logger.LogInformation("Entering render loop");
         do
@@ -22,7 +21,7 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
            await renderer.RenderToOutput(image, ct);
         } while (opt.Continuous && !ct.IsCancellationRequested);
     }
-    void DrawAnalogClock(Image<Bgr565> image)
+    void DrawAnalogClock<TPixel>(Image<TPixel> image) where TPixel : unmanaged, IPixel<TPixel>
     {
         int width = 480, height = 480;
         int centerX = width / 2, centerY = height / 2;
@@ -53,7 +52,7 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
         image.Mutate(ctx => ctx.Fill(white, new EllipsePolygon(centerX, centerY, 8)));
     }
 
-    void DrawClockHand(Image<Bgr565> image, double angleDegrees, double length, Color color, float thickness, int centerX, int centerY)
+    void DrawClockHand<TPixel>(Image<TPixel> image, double angleDegrees, double length, Color color, float thickness, int centerX, int centerY) where TPixel : unmanaged, IPixel<TPixel>
     {
         double angleRad = (angleDegrees - 90) * Math.PI / 180;
         int x = centerX + (int)(length * Math.Cos(angleRad));
