@@ -12,7 +12,7 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
     {
         var opt = options.Value;
         var (width,height) = (opt.Width, opt.Height);
-        using var image = new Image<Rgba32>(width, height);
+        using var image = new Image<Bgra32>(width, height);
 
         logger.LogInformation("Entering render loop");
         do
