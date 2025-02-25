@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+    width="800"
+    height="480"
+    viewBox="0 0 800 480"
+    xmlns="http://www.w3.org/2000/svg">
+    
+  <defs>
+    <!-- Define a radial gradient in user space for the entire canvas -->
+    <radialGradient id="dialGradient" gradientUnits="userSpaceOnUse" 
+                    cx="240" cy="240" r="400">
+      <stop offset="0%" stop-color="#000040" />
+      <stop offset="100%" stop-color="#000000" />
+    </radialGradient>
+
+    <!-- Drop shadow filter using feOffset + feGaussianBlur + feBlend 
+         (compatible with more renderers than feDropShadow) -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <!-- Move the source alpha (the text shape) by 2px right/down -->
+      <feOffset in="SourceAlpha" dx="2" dy="2" result="offset" />
+      <!-- Blur that offset to create a soft shadow -->
+      <feGaussianBlur in="offset" stdDeviation="2" result="blur" />
+      <!-- Blend the original text (SourceGraphic) on top of the blurred offset -->
+      <feBlend in="SourceGraphic" in2="blur" mode="normal" />
+    </filter>
+  </defs>
+
+  <!-- Background rectangle that fills the entire 480x480 area with the gradient -->
+  <rect x="0" y="0" width="800" height="480" fill="url(#dialGradient)" />
+
+  <!-- Outer circle with no fill, just a stroke -->
+  <circle
+      cx="240"
+      cy="240"
+      r="230"
+      fill="none"
+      stroke="#888"
+      stroke-width="4" />
+
+  <!-- Hour numbers (positions unchanged) -->
+  <!-- 12 o'clock -->
+  <text x="240" y="50" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    12
+  </text>
+  <!-- 1 o'clock -->
+  <text x="335" y="75" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    1
+  </text>
+  <!-- 2 o'clock -->
+  <text x="405" y="145" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    2
+  </text>
+  <!-- 3 o'clock -->
+  <text x="430" y="240" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    3
+  </text>
+  <!-- 4 o'clock -->
+  <text x="405" y="335" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    4
+  </text>
+  <!-- 5 o'clock -->
+  <text x="335" y="405" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    5
+  </text>
+  <!-- 6 o'clock -->
+  <text x="240" y="430" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    6
+  </text>
+  <!-- 7 o'clock -->
+  <text x="145" y="405" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    7
+  </text>
+  <!-- 8 o'clock -->
+  <text x="75" y="335" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    8
+  </text>
+  <!-- 9 o'clock -->
+  <text x="50" y="240" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    9
+  </text>
+  <!-- 10 o'clock -->
+  <text x="75" y="145" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    10
+  </text>
+  <!-- 11 o'clock -->
+  <text x="145" y="75" font-size="32" text-anchor="middle"
+        dominant-baseline="middle" fill="#888"
+        font-family="Arial" filter="url(#shadow)">
+    11
+  </text>
+</svg>
