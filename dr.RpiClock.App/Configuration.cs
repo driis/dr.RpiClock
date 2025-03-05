@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using SixLabors.ImageSharp.PixelFormats;
+﻿using System.Globalization;
 
 namespace dr.RpiClock.App;
 
@@ -42,4 +41,7 @@ public static class Configuration
     }
 }
 
-public record RpiClockOptions(int Width, int Height, string OutputFileName, bool Continuous);
+public record RpiClockOptions(int Width, int Height, string OutputFileName, bool Continuous)
+{
+    public CultureInfo RenderCulture { get; } = CultureInfo.GetCultureInfo("da-DK");
+}

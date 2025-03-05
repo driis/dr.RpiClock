@@ -83,7 +83,7 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
     void DrawTodaysDate(IImageProcessingContext image) 
     {
         Font font = SystemFonts.CreateFont("JetBrains Mono", 48, FontStyle.Regular);
-        string dateText = DateTime.Now.ToString("dd. MMMM");
+        string dateText = DateTime.Now.ToString("dd. MMMM", Options.RenderCulture);
         var lowerRightCorner = new PointF(780, 460);   
         RichTextOptions dateTextOptions = new RichTextOptions(font)
         {
@@ -94,7 +94,7 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
         var dateSize = TextMeasurer.MeasureSize(dateText, new RichTextOptions(font));
         image.DrawText(dateTextOptions, dateText, Colors.Hand);
 
-        string weekDay = DateTime.Now.ToString("dddd");
+        string weekDay = DateTime.Now.ToString("dddd", Options.RenderCulture);
         var weekDayPos = new PointF(lowerRightCorner.X - dateSize.Width / 2, lowerRightCorner.Y - dateSize.Height - 16);
         image.DrawText(new RichTextOptions(font)
         {
