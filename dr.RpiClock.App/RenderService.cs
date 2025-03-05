@@ -82,7 +82,7 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
     }
     void DrawTodaysDate(IImageProcessingContext image) 
     {
-        Font font = SystemFonts.CreateFont("Helvetica", 48, FontStyle.Regular);
+        Font font = SystemFonts.CreateFont("JetBrains Mono", 48, FontStyle.Regular);
         string dateText = DateTime.Now.ToString("dd. MMMM");
         var lowerRightCorner = new PointF(780, 460);   
         RichTextOptions dateTextOptions = new RichTextOptions(font)
