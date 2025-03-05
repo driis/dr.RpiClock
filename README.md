@@ -18,7 +18,7 @@ way of achieving this, learning was the key in this project. It is also nice I d
 boot a GUI on an already underpowered Raspberry Pi.
 
 At the same time having a bedside clock that can double as the at home server is also kind of cool ;)
-![How it looks](Resources/IMG_0496.jpeg)
+![How it looks](Resources/IMG_0496.JPEG)
 ## Running on Raspberry Pi
 Make sure you have a suitable LCD attached, you might need to fiddle with the parameters.
 Make sure you have .NET 8 installed
