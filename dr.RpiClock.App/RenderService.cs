@@ -11,6 +11,7 @@ using System.IO;
 
 public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer renderer, ILogger<RenderService> logger)
 {
+    private const float TextVerticalDistance = 20;
     public RpiClockOptions Options => options.Value;
     public async Task Run(CancellationToken ct)
     {
@@ -35,11 +36,13 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
         // Overlay hour tick marks.
         DrawTickMarks(image, centerX, radius, centerY);
 
+        
         // Draw clock hands (with drop shadow for depth).
         DateTime now = DateTime.Now;
+        var seconds = now.Second + now.Millisecond / 1000.0;
         DrawClockHand(image, now.Hour % 12 * 30 + now.Minute * 0.5, radius * 0.6, Colors.Hand, 8, centerX, centerY);
-        DrawClockHand(image, now.Minute * 6, radius * 0.8, Colors.Hand, 5, centerX, centerY);
-        DrawClockHand(image, now.Second * 6, radius * 0.9, Colors.HandSecond, 2, centerX, centerY);
+        DrawClockHand(image, now.Minute * 6 + seconds / 10, radius * 0.8, Colors.Hand, 5, centerX, centerY);
+        DrawClockHand(image, seconds * 6, radius * 0.9, Colors.HandSecond, 2, centerX, centerY);
 
         // Draw the central hub.
         image.Fill(Color.White, new EllipsePolygon(centerX, centerY, 10));
@@ -95,13 +98,21 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
         image.DrawText(dateTextOptions, dateText, Colors.Hand);
 
         string weekDay = DateTime.Now.ToString("dddd", Options.RenderCulture);
-        var weekDayPos = new PointF(lowerRightCorner.X - dateSize.Width / 2, lowerRightCorner.Y - dateSize.Height - 16);
+        var weekDayPos = new PointF(lowerRightCorner.X - dateSize.Width / 2, lowerRightCorner.Y - dateSize.Height - TextVerticalDistance);
         image.DrawText(new RichTextOptions(font)
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Bottom,
             Origin = weekDayPos,
         }, weekDay, Colors.Hand);
+        string timeNow = DateTime.Now.ToString("HH\\:mm", Options.RenderCulture);
+        var timePos = new PointF(weekDayPos.X, lowerRightCorner.Y - 2*(dateSize.Height + TextVerticalDistance));
+        image.DrawText(new RichTextOptions(font)
+        {
+            HorizontalAlignment = HorizontalAlignment.Center,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            Origin = timePos,
+        }, timeNow, Colors.Hand);
     }
 
     static class Colors
