@@ -2,6 +2,8 @@
 
 **Creates an Internet enabled clock based on a Raspberry Pi**
 
+[![Build & Test](https://github.com/driis/dr.RpiClock/actions/workflows/dotnet.yml/badge.svg)](https://github.com/driis/dr.RpiClock/actions/workflows/dotnet.yml)
+
 ![Example clock face](Resources/example.png)
 
 This is a .NET program that modifies the framebuffer on a linux system to draw a clock.
