@@ -13,4 +13,11 @@
     <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="assets\dial.png" />
+    <Content Include="assets\dial.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
