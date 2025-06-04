@@ -21,7 +21,10 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Install font
-      run: mkdir -p /usr/local/share/fonts/truetype/jetbrainsmono && cp Resources/font/jetbrainsmono/*.ttf /usr/local/share/fonts/truetype/jetbrainsmono
+      run: |
+        export FONTPATH=/usr/share/fonts/truetype/jetbrainsmono
+        mkdir -p $FONTPATH
+        cp Resources/font/jetbrainsmono/*.ttf $FONTPATH
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
