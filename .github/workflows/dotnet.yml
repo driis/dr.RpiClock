@@ -31,3 +31,9 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+    - name: Upload image artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: clock
+        path: out.bmp
+        if-no-files-found: error
