@@ -13,6 +13,9 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
 {
     private const float TextVerticalDistance = 20;
     public RpiClockOptions Options => options.Value;
+    
+    static readonly Font _font = SystemFonts.CreateFont("JetBrains Mono", 48, FontStyle.Regular);
+
     public async Task Run(CancellationToken ct)
     {
         logger.LogInformation("Entering render loop");
@@ -46,7 +49,7 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
 
         // Draw the central hub.
         image.Fill(Color.White, new EllipsePolygon(centerX, centerY, 10));
-        
+
         DrawTodaysDate(image);
     }
 
@@ -85,32 +88,32 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
     }
     void DrawTodaysDate(IImageProcessingContext image) 
     {
-        Font font = SystemFonts.CreateFont("JetBrains Mono", 48, FontStyle.Regular);
         string dateText = DateTime.Now.ToString("dd. MMMM", Options.RenderCulture);
         var lowerRightCorner = new PointF(780, 460);   
-        RichTextOptions dateTextOptions = new RichTextOptions(font)
+        RichTextOptions dateTextOptions = new RichTextOptions(_font)
         {
             HorizontalAlignment = HorizontalAlignment.Right,
             VerticalAlignment = VerticalAlignment.Bottom,
             Origin = lowerRightCorner,
         };
-        var dateSize = TextMeasurer.MeasureSize(dateText, new RichTextOptions(font));
+        var dateSize = TextMeasurer.MeasureSize(dateText, new RichTextOptions(_font));
         image.DrawText(dateTextOptions, dateText, Colors.Hand);
-
         string weekDay = DateTime.Now.ToString("dddd", Options.RenderCulture);
         var weekDayPos = new PointF(lowerRightCorner.X - dateSize.Width / 2, lowerRightCorner.Y - dateSize.Height - TextVerticalDistance);
-        image.DrawText(new RichTextOptions(font)
+        image.DrawText(new RichTextOptions(_font)
         {
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Bottom,
             Origin = weekDayPos,
         }, weekDay, Colors.Hand);
+        
         string timeNow = DateTime.Now.ToString("HH\\:mm", Options.RenderCulture);
-        var timePos = new PointF(weekDayPos.X, lowerRightCorner.Y - 2*(dateSize.Height + TextVerticalDistance));
-        image.DrawText(new RichTextOptions(font)
+        var timePos = new PointF(weekDayPos.X,20);
+        var fontTime = new Font(_font, 72, FontStyle.Bold);
+        image.DrawText(new RichTextOptions(fontTime)
         {
             HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Bottom,
+            VerticalAlignment = VerticalAlignment.Top,
             Origin = timePos,
         }, timeNow, Colors.Hand);
     }
