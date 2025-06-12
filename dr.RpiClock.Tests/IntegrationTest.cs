@@ -18,6 +18,7 @@ public class IntegrationTest
         Assert.That(File.Exists(outFile));
         Console.WriteLine($"Rendered output image to file://{outFile}");
         
+        Console.WriteLine($"Current directory is: {Environment.CurrentDirectory}");
         File.Copy(outFile, "../../../../out.bmp", true);
     }
 }
