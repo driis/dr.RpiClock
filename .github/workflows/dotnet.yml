@@ -38,7 +38,7 @@ jobs:
         path: out.bmp
         if-no-files-found: error
         
-  comment:
+  comment:    
     needs: build
     runs-on: ubuntu-latest
     permissions:  
@@ -49,13 +49,15 @@ jobs:
         with:
           name: clock
           path: download
+      - name: Install ImageMagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Generate Base64 Image
         id: encode
         run: |
           file=$(ls download)
           png_file="converted.png"
-          convert "$file" "$png_file"
-          mime_type=$(png_file --mime-type -b "$png_file")
+          convert "download/$file" "$png_file"
+          mime_type=$(file --mime-type -b "$png_file")
           echo -n "data:${mime_type};base64," > image.txt
           base64 -w 0 "$png_file" >> image.txt
       - name: Comment
