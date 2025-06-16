@@ -53,9 +53,11 @@ jobs:
         id: encode
         run: |
           file=$(ls download)
-          mime_type=$(file --mime-type -b "download/$file")
-          base64 -w 0 "download/$file" > image.txt
-          echo "data_uri=data:${mime_type};base64,${base64_data}" >> $GITHUB_OUTPUT
+          png_file="converted.png"
+          convert "$file" "$png_file"
+          mime_type=$(png_file --mime-type -b "$png_file")
+          echo -n "data:${mime_type};base64," > image.txt
+          base64 -w 0 "$png_file" >> image.txt
       - name: Comment
         uses: actions/github-script@v7
         with:
