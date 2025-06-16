@@ -37,3 +37,34 @@ jobs:
         name: clock
         path: out.bmp
         if-no-files-found: error
+        
+  comment:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:  
+      pull-requests: write
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: clock
+          path: download
+      - name: Generate Base64 Image
+        id: encode
+        run: |
+          file=$(ls download)
+          mime_type=$(file --mime-type -b "download/$file")
+          base64_data=$(base64 -w 0 "download/$file")
+          echo "data_uri=data:${mime_type};base64,${base64_data}" >> $GITHUB_OUTPUT
+      - name: Comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const imageData = `${{ steps.encode.outputs.data_uri }}`;
+              const body = `### 📷 Clock face for this build \n\n<img src="${imageData}" width="800"/>`;
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body
+              })
