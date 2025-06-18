@@ -62,7 +62,7 @@ jobs:
         run: |          
           DATE=$(date +'%Y-%m-%d')
           export
-          FILENAME="clockface-$DATE.bmp"
+          FILENAME="clockface-$DATE-$GITHUB_SHA.bmp"
           aws s3 cp "out.bmp" "s3://rpiclock-artifacts/$FILENAME" 
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV          
       - name: Comment
@@ -70,7 +70,7 @@ jobs:
         with:
           script: |            
             const filename = process.env.FILENAME;
-            const body = `### 📷 Clock face for this build:\n\n ![Clockface](${filename})`;
+            const body = `### 📷 Clock face for this build:\n\n ![Clockface](https://rpiclock-artifacts.s3.amazonaws.com/${filename})`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
