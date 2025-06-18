@@ -41,6 +41,9 @@ jobs:
   comment:    
     needs: build
     runs-on: ubuntu-latest
+    on: 
+      pull_request:
+        branches: ["main"]
     permissions:  
       pull-requests: write
     steps:
