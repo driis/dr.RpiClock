@@ -41,9 +41,7 @@ jobs:
   comment:    
     needs: build
     runs-on: ubuntu-latest
-    on: 
-      pull_request:
-        branches: ["main"]
+    if: github.event_name == 'pull_request'
     permissions:  
       pull-requests: write
     steps:
