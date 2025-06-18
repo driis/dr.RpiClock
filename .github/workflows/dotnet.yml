@@ -61,8 +61,8 @@ jobs:
         id: encode
         run: |          
           DATE=$(date +'%Y-%m-%d')
-          HASH=$(git rev-parse --short HEAD)
-          FILENAME="clockface-$DATE-$HASH.bmp"
+          export
+          FILENAME="clockface-$DATE.bmp"
           aws s3 cp "out.bmp" "s3://rpiclock-artifacts/$FILENAME" 
           echo "FILENAME=$FILENAME" >> GITHUB_ENV          
       - name: Comment
