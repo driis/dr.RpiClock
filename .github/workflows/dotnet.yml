@@ -61,7 +61,7 @@ jobs:
         id: encode
         run: |          
           DATE=$(date +'%Y-%m-%d')          
-          FILENAME="clockface-$DATE-$GITHUB_SHA.bmp"
+          FILENAME="clockface-$DATE-$GITHUB_SHA.png"
           convert out.bmp $FILENAME
           aws s3 cp $FILENAME "s3://rpiclock-artifacts/$FILENAME" 
           echo "FILENAME=$FILENAME" >> $GITHUB_ENV          
