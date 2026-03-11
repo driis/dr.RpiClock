@@ -47,6 +47,10 @@ WantedBy=multi-user.target
 SERVICEEOF
 
 echo ""
+echo "=== Stopping service before deploy ==="
+ssh "$REMOTE_HOST" "sudo systemctl stop $SERVICE_NAME 2>/dev/null || true"
+
+echo ""
 echo "=== Deploying to $REMOTE_HOST:$REMOTE_DIR ==="
 ssh "$REMOTE_HOST" "mkdir -p $REMOTE_DIR"
 scp -r "$PUBLISH_DIR/"* "$REMOTE_HOST:$REMOTE_DIR/"

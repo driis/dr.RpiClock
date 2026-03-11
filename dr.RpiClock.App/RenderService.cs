@@ -18,6 +18,7 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
     static readonly Font _fontLarge = SystemFonts.CreateFont("JetBrains Mono", 72, FontStyle.Bold);
     static readonly Font _fontTemp = SystemFonts.CreateFont("JetBrains Mono", 56, FontStyle.Bold);
     static readonly Font _fontWeatherDesc = SystemFonts.CreateFont("JetBrains Mono", 20, FontStyle.Regular);
+    static readonly Font _fontDialNumber = SystemFonts.CreateFont("JetBrains Mono", 28, FontStyle.Regular);
 
     public async Task Run(CancellationToken ct)
     {
@@ -82,9 +83,9 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
         {
             double angle = i * Math.PI / 30;
             bool isHour = i % 5 == 0;
-            float innerFactor = isHour ? 0.88f : 0.93f;
+            float innerFactor = isHour ? 0.82f : 0.92f;
             float outerFactor = 0.97f;
-            float thickness = isHour ? 3f : 1.2f;
+            float thickness = isHour ? 4f : 1.5f;
             Color color = isHour ? Colors.TickHour : Colors.TickMinute;
 
             float x1 = centerX + (float)(radius * innerFactor * Math.Cos(angle));
@@ -92,6 +93,21 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
             float x2 = centerX + (float)(radius * outerFactor * Math.Cos(angle));
             float y2 = centerY + (float)(radius * outerFactor * Math.Sin(angle));
             image.DrawLine(color, thickness, new PointF(x1, y1), new PointF(x2, y2));
+        }
+
+        // Draw hour numbers inward of the tick marks
+        float numberRadius = radius * 0.72f;
+        for (int h = 1; h <= 12; h++)
+        {
+            double angle = h * Math.PI / 6 - Math.PI / 2; // 12 at top
+            float nx = centerX + (float)(numberRadius * Math.Cos(angle));
+            float ny = centerY + (float)(numberRadius * Math.Sin(angle));
+            image.DrawText(new RichTextOptions(_fontDialNumber)
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Origin = new PointF(nx, ny),
+            }, h.ToString(), Colors.TickHour);
         }
     }
 
@@ -374,13 +390,13 @@ public class RenderService(IOptions<RpiClockOptions> options, IPixelRenderer ren
 
     static class Colors
     {
-        public static Color HandFill { get; } = new(new Rgba32(210, 210, 220, 240));
-        public static Color HandOutline { get; } = new(new Rgba32(180, 180, 190, 200));
-        public static Color HandGlow { get; } = new(new Rgba32(100, 140, 200, 40));
-        public static Color SecondHand { get; } = new(new Rgba32(220, 50, 50, 255));
+        public static Color HandFill { get; } = new(new Rgba32(230, 230, 240, 255));
+        public static Color HandOutline { get; } = new(new Rgba32(200, 200, 210, 255));
+        public static Color HandGlow { get; } = new(new Rgba32(100, 140, 200, 50));
+        public static Color SecondHand { get; } = new(new Rgba32(230, 50, 50, 255));
 
-        public static Color TickHour { get; } = new(new Rgba32(200, 200, 210, 230));
-        public static Color TickMinute { get; } = new(new Rgba32(150, 150, 170, 150));
+        public static Color TickHour { get; } = new(new Rgba32(220, 220, 230, 255));
+        public static Color TickMinute { get; } = new(new Rgba32(160, 160, 180, 200));
 
         public static Color HubOuter { get; } = new(new Rgba32(80, 80, 100, 255));
         public static Color HubMiddle { get; } = new(new Rgba32(160, 160, 180, 255));
