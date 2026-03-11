@@ -8,7 +8,7 @@ public record WeatherData(double Temperature, int WeatherCode, DateTime LastUpda
 public class WeatherService(HttpClient httpClient, ILogger<WeatherService> logger)
 {
     private const string ApiUrl =
-        "https://api.open-meteo.com/v1/forecast?latitude=55.6761&longitude=12.5683&current=temperature_2m,weather_code&timezone=Europe/Copenhagen";
+        "https://api.open-meteo.com/v1/forecast?latitude=56.27&longitude=9.82&current=temperature_2m,weather_code&timezone=Europe/Copenhagen";
 
     private WeatherData? _cached;
     private DateTime _lastFetch = DateTime.MinValue;
@@ -42,19 +42,19 @@ public class WeatherService(HttpClient httpClient, ILogger<WeatherService> logge
 
     public static string GetWeatherDescription(int code) => code switch
     {
-        0 => "Clear sky",
-        1 or 2 or 3 => "Partly cloudy",
-        45 or 48 => "Fog",
-        51 or 53 or 55 => "Drizzle",
-        61 or 63 or 65 => "Rain",
-        66 or 67 => "Freezing rain",
-        71 or 73 or 75 => "Snow",
-        77 => "Snow grains",
-        80 or 81 or 82 => "Rain showers",
-        85 or 86 => "Snow showers",
-        95 => "Thunderstorm",
-        96 or 99 => "Thunderstorm with hail",
-        _ => "Unknown"
+        0 => "Klar himmel",
+        1 or 2 or 3 => "Delvist skyet",
+        45 or 48 => "Tåge",
+        51 or 53 or 55 => "Støvregn",
+        61 or 63 or 65 => "Regn",
+        66 or 67 => "Isslag",
+        71 or 73 or 75 => "Sne",
+        77 => "Snekorn",
+        80 or 81 or 82 => "Regnbyger",
+        85 or 86 => "Snebyger",
+        95 => "Tordenvejr",
+        96 or 99 => "Tordenvejr m. hagl",
+        _ => "Ukendt"
     };
 
     private record OpenMeteoResponse
