@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 
 namespace dr.RpiClock.App;
 
@@ -9,13 +9,15 @@ public static class Configuration
         var serviceProvider = new ServiceCollection()
             .AddLogging(configure => configure.AddConsole().SetMinimumLevel(LogLevel.Information))
             .AddSingleton<IOptions<RpiClockOptions>, RpiClockOptionParser>(sc => new RpiClockOptionParser(args))
+            .AddSingleton<HttpClient>()
+            .AddSingleton<WeatherService>()
             .AddTransient<RenderService>();
 
         if (args.Contains("-c"))
             serviceProvider.AddTransient<IPixelRenderer, FrameBufferRenderer>();
         else
             serviceProvider.AddTransient<IPixelRenderer, BmpPixelRenderer>();
-            
+
         return serviceProvider.BuildServiceProvider();
     }
 
